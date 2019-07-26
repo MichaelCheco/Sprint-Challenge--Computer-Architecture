@@ -55,26 +55,6 @@ class CPU:
         else:
             raise Exception(f"{op} is not supported! 🚀")
 
-    def trace(self):
-        """
-        Handy function to print out the CPU state. You might want to call this
-        from run() if you need help debugging.
-        """
-
-        print(f"TRACE: %02X | %02X %02X %02X |" % (
-            self.pc,
-            # self.fl,
-            # self.ie,
-            self.ram_read(self.pc),
-            self.ram_read(self.pc + 1),
-            self.ram_read(self.pc + 2)
-        ), end='')
-
-        for i in range(8):
-            print(" %02X" % self.reg[i], end='')
-
-        print()
-
     def run(self):
         """Run the CPU."""
         self.running = True
@@ -120,14 +100,14 @@ class CPU:
 
         while self.running:
             IR = self.ram[self.pc]
-            operand_count = (IR & 0b11000000) >> 6
+            op_count = (IR & 0b11000000) >> 6
             sets_pc = (IR & 0b00010000) >> 4
 
             op_a = None
             op_b = None
-            if operand_count > 0:
+            if op_count > 0:
                 op_a = self.ram[self.pc + 1]
-            if operand_count > 1:
+            if op_count > 1:
                 op_b = self.ram[self.pc + 2]
 
             command = bt.get(IR)
@@ -137,4 +117,4 @@ class CPU:
                 sys.exit(1)
             command()
             if not sets_pc:
-                self.pc += (operand_count + 1)
+                self.pc += (op_count + 1)
