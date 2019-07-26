@@ -21,8 +21,6 @@ class CPU:
         self.ram[MAR] = MDR
 
     def load(self, path):
-        """Load a program into memory."""
-
         a = 0
         p = []
 
@@ -41,8 +39,6 @@ class CPU:
             a += 1
 
     def alu(self, op, reg_a, reg_b):
-        """ALU operations."""
-
         if op == "CMP":
             a, b = self.reg[reg_a], self.reg[reg_b]
             if a == b:
@@ -56,7 +52,6 @@ class CPU:
             raise Exception(f"{op} is not supported! 🚀")
 
     def run(self):
-        """Run the CPU."""
         self.running = True
 
         def stop():
